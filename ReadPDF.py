@@ -17,7 +17,7 @@ def readPDF(filename):
         overwriteWarnings=True
         )
 
-    print(reader.getFormTextFields())
+    # print(reader.getFormTextFields())
 
     # Print values from PDF file
     # print("Textbox value = {0}".format(reader.getFields()['txtName']['/V']))

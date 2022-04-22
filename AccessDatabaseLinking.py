@@ -1908,6 +1908,24 @@ def get_labmembers(labkey):
 
     return rows
 
+
+def get_requirements():
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_persons.id, data_persons.lastname, data_persons.firstname, code_labrole.role, data_lab_persons.labid "
+    sql += "FROM (data_lab_persons INNER JOIN data_persons ON data_lab_persons.personid = data_persons.id) "
+    sql += "INNER JOIN code_labrole ON data_lab_persons.labroleid = code_labrole.id "
+    sql += "WHERE (((data_lab_persons.labid)={0})) ORDER BY data_persons.lastname;".format(str(labkey))
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    return rows
+
+
 def get_labrooms(labkey):
     con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
     cur = con.cursor()
@@ -1915,6 +1933,24 @@ def get_labrooms(labkey):
     sql = "SELECT data_rooms.roomnumber "
     sql += "FROM data_lab_rooms INNER JOIN data_rooms ON data_lab_rooms.roomid = data_rooms.id "
     sql += "WHERE (((data_lab_rooms.labid)={0})) ORDER BY data_rooms.roomnumber;".format(str(labkey))
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    return rows
+
+
+def get_currentactivephdstudents():
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_person_olddb_requirements.*, data_person_olddb_requirements.CurDeg, "
+    sql += "data_persons.active, data_persons.lastname FROM data_person_olddb_requirements INNER JOIN "
+    sql += "data_persons ON data_person_olddb_requirements.PersonID = data_persons.id "
+    sql += "WHERE (((data_person_olddb_requirements.CurDeg)='PhD') "
+    sql += "AND ((data_persons.active)=True)) ORDER BY data_persons.lastname;"
 
     rows = cur.execute(sql).fetchall()
 

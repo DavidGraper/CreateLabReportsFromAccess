@@ -26,18 +26,70 @@ def set_need_appearances_writer(writer: PdfFileWriter):
         return writer
 
 
-def write_PHDPDF():
-    myfile = PdfFileReader("C:\\TEMP\\PhD Requirements.pdf")
+def write_PHDPDF(studentname, advisorname, entrydate, dateofadvanceddegree, teaching1_2, corearea, coreexam, tool, selectcommittee,
+                 qe2semesterresult, advancedtocandidacy):
+
+    # Template file
+    myfile = PdfFileReader("F:\\PhD Requirements.pdf")
     first_page = myfile.getPage(0)
 
     writer = PdfFileWriter()
     set_need_appearances_writer(writer)
     data_dict = {
-                'lblStudentName': 'David Graper',
-                'lblAdvisorName:': 'Catherine Kirkland'
+        'txtStudentName': studentname,
+        'txtAdvisorName': advisorname,
+        'txtEntryDate': entrydate,
+        'txtDateOfAdvancedDegree': dateofadvanceddegree,
+        'txtTeaching1_2': teaching1_2,
+        'txtCoreArea': corearea,
+        'txtCoreExam': coreexam,
+        'txtTool': tool ,
+        'txtSelectCommittee': selectcommittee,
+        'txtQE2SemesterResult': qe2semesterresult,
+        'txtAdvanceToCandidacy': advancedtocandidacy
                 }
 
     writer.updatePageFormFieldValues(first_page, fields=data_dict)
+    writer.addPage(first_page)
+
+    filename = "c:\\temp\\Requirements {0}.pdf".format(studentname)
+
+    with open(filename,"wb") as new:
+        writer.write(new)
+
+
+def write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datestudybegan, admittedtocandidacy,
+                               approvaldate, submitdate, satisfactorydefense, transmitted, dissertationtitle):
+
+    # Template file
+    myfile = PdfFileReader("F:\\CONFERRAL OF DEGREE.pdf")
+    first_page = myfile.getPage(0)
+
+    filename = "c:\\temp\\Conferral Of Degree {0}.pdf".format(studentname)
+
+    writer = PdfFileWriter()
+    set_need_appearances_writer(writer)
+    data_dict = {
+        'txtStudentName': studentname,
+        'txtStudentID': studentid,
+        'txtDegree': degree,
+        'txtDeptMajor': deptmajor,
+        'txtDateStudyBegan': datestudybegan,
+        'txtAdmittedToCandidacy': admittedtocandidacy,
+        'txtApprovalDate': approvaldate,
+        'txtSubmitDate': submitdate,
+        'txtSatisfactoryDefense': satisfactorydefense,
+        'txtTransmitted': transmitted,
+        'txtDissertationTitle': dissertationtitle,
+        'txtFilename': filename
+                }
+
+    writer.updatePageFormFieldValues(first_page, fields=data_dict)
+    writer.addPage(first_page)
+
+    with open(filename,"wb") as new:
+        writer.write(new)
+
 
 def write_PDF(labname, labwebsite, labmembers, rooms):
     myfile = PdfFileReader("C:\\TEMP\\PI Form 7.pdf")
