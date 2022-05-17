@@ -36,9 +36,16 @@ if __name__ == '__main__':
         rooms = AccessDatabaseLinking.get_labrooms(lab[0])
         labname = lab[1]
         labwebsite = lab[2]
+        labphones = AccessDatabaseLinking.get_labphones(lab[0])
 
         # Create new PDF form for lab
-        CreatePDF.write_PDF(labname, labwebsite, labmembers, rooms)
+
+        if len(labphones) == 0:
+            labphone = ""
+        else:
+            labphone = labphones[0][0]
+
+        CreatePDF.write_PDF(labname, labwebsite, labmembers, rooms, labphone)
 
 
     phdreqs = AccessDatabaseLinking.get_currentactivephdstudents()
@@ -158,7 +165,21 @@ if __name__ == '__main__':
         CreatePDF.write_PHDPDF(studentname, advisorname, entrydate, dateofadvanceddegree, teaching1_2, corearea,
                                coreexam, tool, selectcommittee, qe2semesterresult, advancedtocandidacy)
 
-        CreatePDF.write_ConferralOfDegreePDF(studentname, )
+        # studentname already determined above
+        studentid = phdreq[12]
+        degree = phdreq[20]
+        deptmajor = "Biological Sciences"
+        datestudybegan = datetime.date.strftime(entrydate, "%m/%d/%Y")
+        admittedtocandidacy = advancedtocandidacy
+        approvaldate = phdreq[42]
+        submitdate = "TBD"
+        satisfactorydefense = "TBD"
+        transmitted = "TBD"
+        dissertationtitle = "TBD"
+
+        CreatePDF.write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datestudybegan, admittedtocandidacy,
+                               approvaldate, submitdate, satisfactorydefense, transmitted, dissertationtitle)
+
     # ReadPDF.readPDF("f:\\PhD Requirements.pdf")
     print_hi('PyCharm')
 

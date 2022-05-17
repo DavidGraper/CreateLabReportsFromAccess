@@ -63,6 +63,7 @@ def write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datest
 
     # Template file
     myfile = PdfFileReader("F:\\CONFERRAL OF DEGREE.pdf")
+    # myfile = PdfFileReader("F:\\Conferral Slug 1.pdf")
     first_page = myfile.getPage(0)
 
     filename = "c:\\temp\\Conferral Of Degree {0}.pdf".format(studentname)
@@ -85,13 +86,49 @@ def write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datest
                 }
 
     writer.updatePageFormFieldValues(first_page, fields=data_dict)
+
     writer.addPage(first_page)
 
     with open(filename,"wb") as new:
         writer.write(new)
 
 
-def write_PDF(labname, labwebsite, labmembers, rooms):
+def write_DoctoralProgressReportPDF(studentname, advisorname, entrydate, corearea, teaching1, teaching2,
+                                    coreexamsemesterresult, tool, selectcommittee, qe2semesterresult,
+                                    advancetocandidacy, expectedgraddate):
+
+    # Template file
+    templatefile = PdfFileReader("F:\\Doctoral Student Progress Report 2022.pdf")
+    first_page = templatefile.getPage(0)
+
+    outputfilename = "c:\\temp\\{0} - Doctoral Student Progress Report.pdf".format(studentname)
+
+    writer = PdfFileWriter()
+    set_need_appearances_writer(writer)
+    data_dict = {
+        'txtAdvanceToCandidacy': advancetocandidacy,
+        'txtAdvisor': advisorname,
+        'txtCoreArea': corearea,
+        'txtCoreExamSemesterResult': coreexamsemesterresult,
+        'txtEntryDate': entrydate,
+        'txtExpectedGraduationDate': expectedgraddate,
+        'txtName': studentname,
+        'txtQE2SemesterResult': qe2semesterresult,
+        'txtSelectCommittee': selectcommittee,
+        'txtTeaching1': teaching1,
+        'txtTeaching2': teaching2,
+        'txtTool': tool
+                }
+
+    writer.updatePageFormFieldValues(first_page, fields=data_dict)
+
+    writer.addPage(first_page)
+
+    with open(outputfilename,"wb") as new:
+        writer.write(new)
+
+
+def write_PDF(labname, labwebsite, labmembers, rooms, labphone):
     myfile = PdfFileReader("C:\\TEMP\\PI Form 7.pdf")
     first_page = myfile.getPage(0)
 
@@ -119,7 +156,8 @@ def write_PDF(labname, labwebsite, labmembers, rooms):
                 'txtPIOffice': pioffice,
                 'txtPIOfficePhone': piphone,
                 'txtLabName': labname,
-                'txtLabWebsite': labwebsite
+                'txtLabWebsite': labwebsite,
+                'txtLabPhone': labphone
                 }
 
     i = 1

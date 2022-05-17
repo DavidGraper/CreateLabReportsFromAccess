@@ -1942,6 +1942,20 @@ def get_labrooms(labkey):
     return rows
 
 
+def get_labphones(labkey):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_lab_phones.phonenumber FROM data_lab_phones where data_lab_phones.labid = {0};".format(str(labkey))
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    return rows
+
+
 def get_currentactivephdstudents():
     con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
     cur = con.cursor()
