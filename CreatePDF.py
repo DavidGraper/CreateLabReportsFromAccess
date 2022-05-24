@@ -1,9 +1,14 @@
 import PyPDF2
+import os
 
 from PyPDF2 import PdfFileWriter, PdfFileReader
 from PyPDF2.generic import BooleanObject, NameObject, IndirectObject
 
 import AccessDatabaseLinking
+
+def createdirifnotexists(dirpath):
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath)
 
 
 def set_need_appearances_writer(writer: PdfFileWriter):
@@ -52,7 +57,7 @@ def write_PHDPDF(studentname, advisorname, entrydate, dateofadvanceddegree, teac
     writer.updatePageFormFieldValues(first_page, fields=data_dict)
     writer.addPage(first_page)
 
-    filename = "c:\\temp\\Requirements {0}.pdf".format(studentname)
+    filename = "c:\\temp\\{0}\\{1} - Doctoral Student Progress Report.pdf".format(advisorname, studentname)
 
     with open(filename,"wb") as new:
         writer.write(new)
@@ -101,7 +106,16 @@ def write_DoctoralProgressReportPDF(studentname, advisorname, entrydate, coreare
     templatefile = PdfFileReader("F:\\Doctoral Student Progress Report 2022.pdf")
     first_page = templatefile.getPage(0)
 
-    outputfilename = "c:\\temp\\{0} - Doctoral Student Progress Report.pdf".format(studentname)
+    dirpath1 = "c:\\temp\\Progress Reports"
+    createdirifnotexists(dirpath1)
+    dirpath2 = "c:\\temp\\Progress Reports\\{0}".format(advisorname)
+    createdirifnotexists(dirpath2)
+    dirpath3 = "c:\\temp\\Progress Reports\\{0}\\MS".format(advisorname)
+    createdirifnotexists(dirpath3)
+    dirpath4 = "c:\\temp\\Progress Reports\\{0}\\PhD".format(advisorname)
+    createdirifnotexists(dirpath4)
+
+    outputfilename = "c:\\temp\\Progress Reports\\{0}\\PhD\\{1} - Doctoral Student Progress Report.pdf".format(advisorname, studentname)
 
     writer = PdfFileWriter()
     set_need_appearances_writer(writer)
@@ -118,6 +132,49 @@ def write_DoctoralProgressReportPDF(studentname, advisorname, entrydate, coreare
         'txtTeaching1': teaching1,
         'txtTeaching2': teaching2,
         'txtTool': tool
+                }
+
+    writer.updatePageFormFieldValues(first_page, fields=data_dict)
+
+    writer.addPage(first_page)
+
+    with open(outputfilename,"wb") as new:
+        writer.write(new)
+
+
+def write_MastersProgressReportPDF(studentname, advisorname, entrydate, corearea, statuteend,
+                                    coreexamsemester, coreexamresult, selectcommittee, approvaloftopic,
+                                    mcdnadvancedlecture, expectedgraduationdate):
+
+    # Template file
+    templatefile = PdfFileReader("F:\\Masters Student Progress Report 2022.pdf")
+    first_page = templatefile.getPage(0)
+
+    dirpath1 = "c:\\temp\\Progress Reports"
+    createdirifnotexists(dirpath1)
+    dirpath2 = "c:\\temp\\Progress Reports\\{0}".format(advisorname)
+    createdirifnotexists(dirpath2)
+    dirpath3 = "c:\\temp\\Progress Reports\\{0}\\MS".format(advisorname)
+    createdirifnotexists(dirpath3)
+    dirpath4 = "c:\\temp\\Progress Reports\\{0}\\PhD".format(advisorname)
+    createdirifnotexists(dirpath4)
+
+    outputfilename = "c:\\temp\\Progress Reports\\{0}\\MS\\{1} - Masters Student Progress Report.pdf".format(advisorname, studentname)
+
+    writer = PdfFileWriter()
+    set_need_appearances_writer(writer)
+    data_dict = {
+        'txtAdvisor': advisorname,
+        'txtApprovalOfTopic': approvaloftopic,
+        'txtCoreArea': corearea,
+        'txtCoreExam': coreexamsemester,
+        'txtCoreExamResult': coreexamresult,
+        'txtEntryDate': entrydate,
+        'txtExpectedGraduationDate': expectedgraduationdate,
+        'txtMCDN': mcdnadvancedlecture,
+        'txtName': studentname,
+        'txtSelectCommittee': selectcommittee,
+        'txtStatuteEnd': statuteend
                 }
 
     writer.updatePageFormFieldValues(first_page, fields=data_dict)

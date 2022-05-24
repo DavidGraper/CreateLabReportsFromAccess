@@ -20,165 +20,235 @@ def print_hi(name):
 # Press the green button in the gutter to run the script.
 if __name__ == '__main__':
 
-    # ReadPDF.readPDF("f:\\NameGender.pdf")
-    # ReadPDF.readPDF("f:\\PI Form 6_RoomsRemoved.pdf")
-    # ReadPDF.readPDF("f:\\PI Form 6_LabMembersShortFieldnames.pdf")
-    ReadPDF.readPDF("f:\\Undergraduate Exit Survey.pdf")
+    if 1 == 0:
+        # ReadPDF.readPDF("f:\\NameGender.pdf")
+        # ReadPDF.readPDF("f:\\PI Form 6_RoomsRemoved.pdf")
+        # ReadPDF.readPDF("f:\\PI Form 6_LabMembersShortFieldnames.pdf")
+        ReadPDF.readPDF("f:\\Undergraduate Exit Survey.pdf")
 
-    ReadPDF.readPDF("f:\\PhD Requirements.pdf")
+        ReadPDF.readPDF("f:\\PhD Requirements.pdf")
 
-    pi_personid = 0
+        pi_personid = 0
 
-    labs = AccessDatabaseLinking.get_labs()
+        labs = AccessDatabaseLinking.get_labs()
 
-    for lab in labs:
-        labmembers = AccessDatabaseLinking.get_labmembers(lab[0])
-        rooms = AccessDatabaseLinking.get_labrooms(lab[0])
-        labname = lab[1]
-        labwebsite = lab[2]
-        labphones = AccessDatabaseLinking.get_labphones(lab[0])
+        for lab in labs:
+            labmembers = AccessDatabaseLinking.get_labmembers(lab[0])
+            rooms = AccessDatabaseLinking.get_labrooms(lab[0])
+            labname = lab[1]
+            labwebsite = lab[2]
+            labphones = AccessDatabaseLinking.get_labphones(lab[0])
 
-        # Create new PDF form for lab
+            # Create new PDF form for lab
 
-        if len(labphones) == 0:
-            labphone = ""
-        else:
-            labphone = labphones[0][0]
+            if len(labphones) == 0:
+                labphone = ""
+            else:
+                labphone = labphones[0][0]
 
-        CreatePDF.write_PDF(labname, labwebsite, labmembers, rooms, labphone)
+            CreatePDF.write_PDF(labname, labwebsite, labmembers, rooms, labphone)
 
+    # New starting point
 
     phdreqs = AccessDatabaseLinking.get_currentactivephdstudents()
 
     for phdreq in phdreqs:
 
-        # 0     ID
-        # 1     PersonID
-        # 2     Last
-        # 3     Bdate
-        # 4     First
-        # 5     Gen
-        # 6     Code
-        # 7     Core
-        # 8     Current
-        # 9     Status
-        # 10    Title
-        # 11    strpartime
-        # 12    EMPLID
-        # 13    Need 24 Access LS
-        # 14    Curr Semester Teaching
-        # 15    BIO Ungrad Advisor
-        # 16    EntryDT
-        # 17    Field16
-        # 18    Residency
-        # 19    EntryDeg
-        # 20    CurDeg
-        # 21    DTAdvDeg
-        # 22    Advisor
-        # 23    Toefl
-        # 24    Speaks
-        # 25    CountryOr
-        # 26    GREV
-        # 27    U/Inst
-        # 28    UDeg
-        # 29    Statute End
-        # 30    Extension to
-        # 31    Filler
-        # 32    mailbox
-        # 33    Funding Max
-        # 34    # Sem State Fund-Sprg 10
-        # 35    Ethnicity
-        # 36    Field36
-        # 37    InitialAssmt
-        # 38    Exam1 Results
-        # 39    Teaching1
-        # 40    Teaching2
-        # 41    Exam1 Semester
-        # 42    Approval of Topic
-        # 43    Select Advisor
-        # 44    Select Committee
-        # 45    Tool
-        # 46    Exam II Result
-        # 47    Exam II Semester
-        # 48    Advance to Candidacy
-        # 49    MS/PHD Adv Lecture 1
-        # 50    PHD/ Adv Lecture 2
-        # 51    PHD/ Adv Lecture 3
-        # 52    Sem 6 02-04
-        # 53    Sem 7 04-05
-        # 54    SEM 10 07-08
-        # 55    Sem 8 05-06
-        # 56    sEM 9 06-07
-        # 57    SEM 11 08-09
-        # 58    Sem 12 09-10
-        # 59    Sem 13 10-11
-        # 60    Sem 14 11-12
-        # 61    Sem 15 12-13
-        # 62    Sem 16 13-14
-        # 63    Sem 17 14-15
-        # 64    Sem 18 15-16
-        # 65    Sem 19 16-17
-        # 66    Sem 20 17-18
-        # 67    Sem 21 18-19
-        # 68    Sem 22 19-20
-        # 69    EEB/PHD Course 1
-        # 70    Sem 23 20-22
-        # 71    Sem 24 21-22
-        # 72    EEB/PHD Course 2
-        # 73    COMMENT
-        # 74    681 Seminar COmplete
-        # 75    CollapsedName
-        
-        # 1     CurDeg
-        # 2     Core
-        # 3     PersonID
-        # 4     Last
-        # 5     First
-        # 6     EntryDT
-        # 7     Teaching1
-        # 8     Exam1 Semester
-        # 9     Teaching2
-        # 10    Tool
-        # 11    Exam II Semester
-        # 12    Exam I Results
-        # 13    Select Committee
-        # 14    Exam II Result
-        # 15    Advance to Candidacy
-        # 16    Advisor
-        # 17    CollapsedName
+        personid = phdreq[1]
 
-        # Updated 042222 when I loaded the entire table into the new database, including all fields in their original
-        # order
+        studentname = "{0} {1}".format(phdreq[4], phdreq[2])
+        advisorname = AccessDatabaseLinking.GetAdvisorNameForStudent(personid)
+        entrydate = AccessDatabaseLinking.GetEntryDateForStudent(personid)
+        corearea = AccessDatabaseLinking.GetCoreAreaForStudent(personid)
+        teaching1 = AccessDatabaseLinking.GetTeaching1ForStudent(personid)
+        teaching2 = AccessDatabaseLinking.GetTeaching2ForStudent(personid)
 
-        studentname = "{0}, {1}".format(phdreq[2], phdreq[4])
-        advisorname = phdreq[22]
-        entrydate = phdreq[16]
-        dateofadvanceddegree = ""
-        teaching1_2 = "{0} / {1}".format(phdreq[39], phdreq[40])
-        corearea = phdreq[7]
-        coreexam = "{0} / {1}".format(phdreq[41], phdreq[38])
-        tool = phdreq[45]
-        selectcommittee = phdreq[44]
-        qe2semesterresult = "{0} / {1}".format(phdreq[47], phdreq[46])
-        advancedtocandidacy = phdreq[48]
+        coreexamsemesterresults = AccessDatabaseLinking.GetCoreExamSemesterResults(personid)
 
-        CreatePDF.write_PHDPDF(studentname, advisorname, entrydate, dateofadvanceddegree, teaching1_2, corearea,
-                               coreexam, tool, selectcommittee, qe2semesterresult, advancedtocandidacy)
+        coreexamsemesterresult = "{0} / {1}".format(coreexamsemesterresults[0], coreexamsemesterresults[1])
+        qe2semesterresult = "{0} / {1}".format(coreexamsemesterresults[2], coreexamsemesterresults[3])
 
-        # studentname already determined above
-        studentid = phdreq[12]
-        degree = phdreq[20]
-        deptmajor = "Biological Sciences"
-        datestudybegan = datetime.date.strftime(entrydate, "%m/%d/%Y")
-        admittedtocandidacy = advancedtocandidacy
-        approvaldate = phdreq[42]
-        submitdate = "TBD"
-        satisfactorydefense = "TBD"
-        transmitted = "TBD"
-        dissertationtitle = "TBD"
+        # Quick hack -- don't allow slashes with empty strings, just make them plain old empty strings
+        if coreexamsemesterresult == " / ":
+            coreexamsemesterresult = ""
 
-        CreatePDF.write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datestudybegan, admittedtocandidacy,
-                               approvaldate, submitdate, satisfactorydefense, transmitted, dissertationtitle)
+        if qe2semesterresult == " / ":
+            qe2semesterresult = ""
+
+        selectcommittee = AccessDatabaseLinking.GetSelectCommitteeForStudent(personid)
+        advancetocandidacy = AccessDatabaseLinking.GetAdvanceToCandidacy(personid)
+        tool = AccessDatabaseLinking.GetTool(personid)
+
+        CreatePDF.write_DoctoralProgressReportPDF(studentname, advisorname,
+                                                  entrydate,
+                                                  corearea,
+                                                  teaching1,
+                                                  teaching2,
+                                                  coreexamsemesterresult,
+                                                  tool,
+                                                  selectcommittee,
+                                                  qe2semesterresult,
+                                                  advancetocandidacy,
+                                                  "")
+
+    msreqs = AccessDatabaseLinking.get_currentactivemsstudents()
+
+    for msreq in msreqs:
+
+        personid = msreq[1]
+
+        studentname = "{0} {1}".format(msreq[4], msreq[2])
+        advisorname = AccessDatabaseLinking.GetAdvisorNameForStudent(personid)
+        entrydate = AccessDatabaseLinking.GetEntryDateForStudent(personid)
+        corearea = AccessDatabaseLinking.GetCoreAreaForStudent(personid)
+        statuteend = AccessDatabaseLinking.GetStatuteEndForStudent(personid)
+
+        coreexamsemesterresults = AccessDatabaseLinking.GetCoreExamSemesterResults(personid)
+
+        coreexam = coreexamsemesterresults[0]
+        coreexamresult = coreexamsemesterresults[1]
+
+        selectcommittee = AccessDatabaseLinking.GetSelectCommitteeForStudent(personid)
+        approvaloftopic = AccessDatabaseLinking.GetApprovalOfTopicForStudent(personid)
+        mcdnadvancedlecture = AccessDatabaseLinking.GetMCDNAdvancedLectureForStudent(personid)
+
+        tool = AccessDatabaseLinking.GetTool(personid)
+
+        CreatePDF.write_MastersProgressReportPDF(studentname, advisorname,
+                                                  entrydate,
+                                                  corearea, statuteend, coreexam, coreexamresult,
+                                                  selectcommittee, approvaloftopic, mcdnadvancedlecture, "")
+
+
+        # Commented out 05/17/22
+
+        # # 0     ID
+        # # 1     PersonID
+        # # 2     Last
+        # # 3     Bdate
+        # # 4     First
+        # # 5     Gen
+        # # 6     Code
+        # # 7     Core
+        # # 8     Current
+        # # 9     Status
+        # # 10    Title
+        # # 11    strpartime
+        # # 12    EMPLID
+        # # 13    Need 24 Access LS
+        # # 14    Curr Semester Teaching
+        # # 15    BIO Ungrad Advisor
+        # # 16    EntryDT
+        # # 17    Field16
+        # # 18    Residency
+        # # 19    EntryDeg
+        # # 20    CurDeg
+        # # 21    DTAdvDeg
+        # # 22    Advisor
+        # # 23    Toefl
+        # # 24    Speaks
+        # # 25    CountryOr
+        # # 26    GREV
+        # # 27    U/Inst
+        # # 28    UDeg
+        # # 29    Statute End
+        # # 30    Extension to
+        # # 31    Filler
+        # # 32    mailbox
+        # # 33    Funding Max
+        # # 34    # Sem State Fund-Sprg 10
+        # # 35    Ethnicity
+        # # 36    Field36
+        # # 37    InitialAssmt
+        # # 38    Exam1 Results
+        # # 39    Teaching1
+        # # 40    Teaching2
+        # # 41    Exam1 Semester
+        # # 42    Approval of Topic
+        # # 43    Select Advisor
+        # # 44    Select Committee
+        # # 45    Tool
+        # # 46    Exam II Result
+        # # 47    Exam II Semester
+        # # 48    Advance to Candidacy
+        # # 49    MS/PHD Adv Lecture 1
+        # # 50    PHD/ Adv Lecture 2
+        # # 51    PHD/ Adv Lecture 3
+        # # 52    Sem 6 02-04
+        # # 53    Sem 7 04-05
+        # # 54    SEM 10 07-08
+        # # 55    Sem 8 05-06
+        # # 56    sEM 9 06-07
+        # # 57    SEM 11 08-09
+        # # 58    Sem 12 09-10
+        # # 59    Sem 13 10-11
+        # # 60    Sem 14 11-12
+        # # 61    Sem 15 12-13
+        # # 62    Sem 16 13-14
+        # # 63    Sem 17 14-15
+        # # 64    Sem 18 15-16
+        # # 65    Sem 19 16-17
+        # # 66    Sem 20 17-18
+        # # 67    Sem 21 18-19
+        # # 68    Sem 22 19-20
+        # # 69    EEB/PHD Course 1
+        # # 70    Sem 23 20-22
+        # # 71    Sem 24 21-22
+        # # 72    EEB/PHD Course 2
+        # # 73    COMMENT
+        # # 74    681 Seminar COmplete
+        # # 75    CollapsedName
+        #
+        # # 1     CurDeg
+        # # 2     Core
+        # # 3     PersonID
+        # # 4     Last
+        # # 5     First
+        # # 6     EntryDT
+        # # 7     Teaching1
+        # # 8     Exam1 Semester
+        # # 9     Teaching2
+        # # 10    Tool
+        # # 11    Exam II Semester
+        # # 12    Exam I Results
+        # # 13    Select Committee
+        # # 14    Exam II Result
+        # # 15    Advance to Candidacy
+        # # 16    Advisor
+        # # 17    CollapsedName
+        #
+        # # Updated 042222 when I loaded the entire table into the new database, including all fields in their original
+        # # order
+        #
+        # studentname = "{0}, {1}".format(phdreq[2], phdreq[4])
+        # advisorname = phdreq[22]
+        # entrydate = phdreq[16]
+        # dateofadvanceddegree = ""
+        # teaching1_2 = "{0} / {1}".format(phdreq[39], phdreq[40])
+        # corearea = phdreq[7]
+        # coreexam = "{0} / {1}".format(phdreq[41], phdreq[38])
+        # tool = phdreq[45]
+        # selectcommittee = phdreq[44]
+        # qe2semesterresult = "{0} / {1}".format(phdreq[47], phdreq[46])
+        # advancedtocandidacy = phdreq[48]
+        #
+        # CreatePDF.write_PHDPDF(studentname, advisorname, entrydate, dateofadvanceddegree, teaching1_2, corearea,
+        #                        coreexam, tool, selectcommittee, qe2semesterresult, advancedtocandidacy)
+        #
+        # # studentname already determined above
+        # studentid = phdreq[12]
+        # degree = phdreq[20]
+        # deptmajor = "Biological Sciences"
+        # datestudybegan = datetime.date.strftime(entrydate, "%m/%d/%Y")
+        # admittedtocandidacy = advancedtocandidacy
+        # approvaldate = phdreq[42]
+        # submitdate = "TBD"
+        # satisfactorydefense = "TBD"
+        # transmitted = "TBD"
+        # dissertationtitle = "TBD"
+        #
+        # CreatePDF.write_ConferralOfDegreePDF(studentname, studentid, degree, deptmajor, datestudybegan, admittedtocandidacy,
+        #                        approvaldate, submitdate, satisfactorydefense, transmitted, dissertationtitle)
 
     # ReadPDF.readPDF("f:\\PhD Requirements.pdf")
     print_hi('PyCharm')

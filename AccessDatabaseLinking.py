@@ -1974,6 +1974,24 @@ def get_currentactivephdstudents():
     return rows
 
 
+def get_currentactivemsstudents():
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_person_olddb_requirements.*, data_person_olddb_requirements.CurDeg, "
+    sql += "data_persons.active, data_persons.lastname FROM data_person_olddb_requirements INNER JOIN "
+    sql += "data_persons ON data_person_olddb_requirements.PersonID = data_persons.id "
+    sql += "WHERE (((data_person_olddb_requirements.CurDeg)='MS') "
+    sql += "AND ((data_persons.active)=True)) ORDER BY data_persons.lastname;"
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    return rows
+
+
 def get_officeroomnumber_by_personid(personid):
     con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
     cur = con.cursor()
@@ -2015,6 +2033,287 @@ def get_officephone_by_personid(personid):
         return rows[0][0]
     else:
         return ""
+
+
+def GetAdvisorNameForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_persons.firstname, data_persons.lastname "
+    sql += "FROM data_person_academicadvisors INNER JOIN data_persons ON "
+    sql += "data_person_academicadvisors.advisorid = data_persons.id "
+    sql += "WHERE (((data_person_academicadvisors.adviseeid)={0}));".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return "{0} {1}".format(rows[0][0], rows[0][1])
+    else:
+        return ""
+
+
+def GetEntryDateForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT Format([data_person_olddb_requirements.EntryDT], 'mm/dd/yyyy') as Expr1 " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetStatuteEndForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [Statute End] " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return str(int(rows[0][0]))
+    else:
+        return ""
+
+
+def GetCoreAreaForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT Core " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetApprovalOfTopicForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [Approval of Topic] " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetMCDNAdvancedLectureForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [MS/PHD Adv Lecture 1] " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetBIO681CompleteForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [681 Seminar COmplete] " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetTeaching1ForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT Teaching1 " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetTeaching2ForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT Teaching2 " \
+          "FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetSelectCommitteeForStudent(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [Select Committee] FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetAdvanceToCandidacy(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT [Advance to Candidacy] FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetTool(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT tool FROM data_person_olddb_requirements "
+    sql += "where personid={0};".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    if len(rows) > 0:
+        return rows[0][0]
+    else:
+        return ""
+
+
+def GetCoreExamSemesterResults(personid):
+    con = pyodbc.connect(r'Driver={Microsoft Access Driver (*.mdb, *.accdb)};DBQ=c:\Temp\biologydatabase.mdb;')
+    cur = con.cursor()
+
+    sql = "SELECT data_person_olddb_requirements.[Exam1 Semester], data_person_olddb_requirements.[Exam1 Results], "
+    sql += "data_person_olddb_requirements.[Exam II Semester], data_person_olddb_requirements.[Exam II Result] "
+    sql += "FROM data_person_olddb_requirements WHERE (((data_person_olddb_requirements.PersonID)={0}));".format(personid)
+
+    print(sql)
+
+    rows = cur.execute(sql).fetchall()
+
+    cur.close()
+    con.close()
+
+    returnlist = []
+
+    if len(rows) > 0:
+        returnlist.append(rows[0][0])
+        returnlist.append(rows[0][1])
+        returnlist.append(rows[0][2])
+        returnlist.append(rows[0][3])
+        return returnlist
+    else:
+        returnlist.append('')
+        returnlist.append('')
+        returnlist.append('')
+        returnlist.append('')
+        return returnlist
 
 
 def get_old_access_db_address_records():
